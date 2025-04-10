@@ -56,10 +56,8 @@ public class BankService {
         if (transactionDTO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transfer amount must be greater than zero.");
         }
-
-        BankAccount senderAccount = accountRepo.findById(transactionDTO.getSenderAccountNumber())
-                .orElseThrow(() -> new AccountNotFoundException("Sender account not found: "
-                        + transactionDTO.getSenderAccountNumber()));
+        BankAccount senderAccount = AccountUtil.findAccountAndAccessOrThrow(accountRepo,
+                transactionDTO.getSenderAccountNumber(), securityUtil);
 
         BankAccount receiverAccount = accountRepo.findById(transactionDTO.getReceiverAccountNumber())
                 .orElseThrow(() -> new AccountNotFoundException("Receiver account not found: "

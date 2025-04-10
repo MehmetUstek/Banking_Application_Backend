@@ -26,6 +26,8 @@ import com.example.demo.repositories.UserRepository;
 import com.example.demo.security.JwtService;
 import com.example.demo.utils.RandomNumberGenerator;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -56,12 +58,24 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO request) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO request, HttpServletResponse response) {
         try {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getCustomerNumber(), request.getPassword()));
             String token = jwtService.generateToken(authentication.getName());
-            return ResponseEntity.ok("{\"token\":\"" + token + "\"}");
+
+            // Create JWT cookie
+            Cookie jwtCookie = new Cookie("JWT_TOKEN", token);
+            jwtCookie.setHttpOnly(true); // Not accessible via JavaScript
+            // jwtCookie.setSecure(true); // Uncomment if using HTTPS. Left HTTP for dev
+            // environment.
+            jwtCookie.setPath("/"); // Cookie is valid for all endpoints
+            jwtCookie.setMaxAge(60 * 60); // 1 hour validity
+            jwtCookie.setAttribute("SameSite", "Strict");
+
+            response.addCookie(jwtCookie);
+
+            return ResponseEntity.ok("Logged in successfully");
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(401).body("{\"error\":\"Invalid customerNumber or password\"}");
         }

@@ -33,3 +33,5 @@ build/
 .vscode/
 .env
 *.code-workspace
+
+.DS_Store

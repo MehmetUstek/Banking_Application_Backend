@@ -46,7 +46,7 @@ CREATE TABLE loan (
     account_number VARCHAR(10), -- Indicates the account number where the loan is deposited.
     loan_amount DECIMAL(10, 2) NOT NULL,
     remaining_amount DECIMAL(10, 2) NOT NULL,
-    interest_rate DECIMAL(2, 2) NOT NULL,
+    interest_rate DECIMAL(4, 2) NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     status VARCHAR(20) DEFAULT 'ACTIVE',

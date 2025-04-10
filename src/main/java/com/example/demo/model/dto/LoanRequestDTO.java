@@ -1,58 +1,41 @@
 package com.example.demo.model.dto;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 
 public class LoanRequestDTO {
+
     @NotNull
-    @Positive
     private BigDecimal loanAmount;
+
+    // New field: duration in months (must be between 1 and 12)
     @NotNull
-    @Positive
-    private BigDecimal interestRate;
+    @Min(1)
+    @Max(12)
+    private Integer duration;
+
+    // Assuming you need to associate a loan with a bank account
     @NotNull
-    private Instant startDate;
-    @NotNull
-    private Instant endDate;
-    @NotBlank(message = "Bank account number must not be blank")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Bank account number must be exactly 10 digits")
     private String bankAccountNumber;
 
+    // Getters and Setters
     public BigDecimal getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(BigDecimal amount) {
-        this.loanAmount = amount;
+    public void setLoanAmount(BigDecimal loanAmount) {
+        this.loanAmount = loanAmount;
     }
 
-    public BigDecimal getInterestRate() {
-        return interestRate;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public Instant getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Instant startDate) {
-        this.startDate = startDate;
-    }
-
-    public Instant getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Instant endDate) {
-        this.endDate = endDate;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public String getBankAccountNumber() {
