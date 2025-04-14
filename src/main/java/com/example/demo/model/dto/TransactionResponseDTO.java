@@ -2,19 +2,20 @@ package com.example.demo.model.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Optional;
 
 public class TransactionResponseDTO {
     private Long id;
-    private String senderAccountNumber;
-    private String receiverAccountNumber;
+    private Optional<String> senderAccountNumber;
+    private Optional<String> receiverAccountNumber;
     private BigDecimal amount;
     private Instant timestamp;
 
     public TransactionResponseDTO(Long id, String senderAccountNumber, String receiverAccountNumber, BigDecimal amount,
             Instant timestamp) {
         this.id = id;
-        this.senderAccountNumber = senderAccountNumber;
-        this.receiverAccountNumber = receiverAccountNumber;
+        this.senderAccountNumber = Optional.ofNullable(senderAccountNumber);
+        this.receiverAccountNumber = Optional.ofNullable(receiverAccountNumber);
         this.amount = amount;
         this.timestamp = timestamp;
     }
@@ -28,20 +29,20 @@ public class TransactionResponseDTO {
         this.id = id;
     }
 
-    public String getSenderAccountNumber() {
+    public Optional<String> getSenderAccountNumber() {
         return senderAccountNumber;
     }
 
     public void setSenderAccountNumber(String senderAccountNumber) {
-        this.senderAccountNumber = senderAccountNumber;
+        this.senderAccountNumber = Optional.ofNullable(senderAccountNumber);
     }
 
-    public String getReceiverAccountNumber() {
+    public Optional<String> getReceiverAccountNumber() {
         return receiverAccountNumber;
     }
 
     public void setReceiverAccountNumber(String receiverAccountNumber) {
-        this.receiverAccountNumber = receiverAccountNumber;
+        this.receiverAccountNumber = Optional.ofNullable(receiverAccountNumber);
     }
 
     public BigDecimal getAmount() {

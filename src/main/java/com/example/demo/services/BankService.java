@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.math.BigDecimal;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -48,43 +49,6 @@ public class BankService {
     // Validators
     @Autowired
     AccountNumberValidator accountNumberValidator;
-
-    @Transactional
-    @PreAuthorize("isAuthenticated()")
-    public Transaction transfer(TransactionDTO transactionDTO)
-            throws AccountNotFoundException, SameAccountTransferException, InsufficientFundsException {
-        if (transactionDTO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Transfer amount must be greater than zero.");
-        }
-        BankAccount senderAccount = AccountUtil.findAccountAndAccessOrThrow(accountRepo,
-                transactionDTO.getSenderAccountNumber(), securityUtil);
-
-        BankAccount receiverAccount = accountRepo.findById(transactionDTO.getReceiverAccountNumber())
-                .orElseThrow(() -> new AccountNotFoundException("Receiver account not found: "
-                        + transactionDTO.getReceiverAccountNumber()));
-
-        if (senderAccount.getAccountNumber().equals(receiverAccount.getAccountNumber())) {
-            throw new SameAccountTransferException("Sender and receiver must be different.");
-        }
-
-        if (senderAccount.getBalance().compareTo(transactionDTO.getAmount()) < 0) {
-            throw new InsufficientFundsException("Insufficient funds.");
-        }
-
-        // Update balances
-        senderAccount.setBalance(senderAccount.getBalance().subtract(transactionDTO.getAmount()));
-        receiverAccount.setBalance(receiverAccount.getBalance().add(transactionDTO.getAmount()));
-
-        accountRepo.save(senderAccount);
-        accountRepo.save(receiverAccount);
-
-        // Create and save the transaction
-        Transaction transaction = new Transaction();
-        transaction.setSenderAccount(senderAccount);
-        transaction.setReceiverAccount(receiverAccount);
-        transaction.setAmount(transactionDTO.getAmount());
-        return transactionRepo.save(transaction);
-    }
 
     public BankAccount getAccount(String accountNumber) {
         return accountRepo.findById(accountNumber)

@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.BankAccount;
-import com.example.demo.model.Transaction;
 import com.example.demo.model.dto.BankAccountDTO;
 import com.example.demo.model.dto.DepositRequestDTO;
-import com.example.demo.model.dto.TransactionDTO;
-import com.example.demo.model.dto.TransactionResponseDTO;
 import com.example.demo.model.dto.WithdrawRequestDTO;
 import com.example.demo.services.BankService;
 
@@ -71,19 +68,6 @@ public class BankController {
     @PreAuthorize("isAuthenticated()")
     public List<BankAccountDTO> showAccounts() throws AccountNotFoundException {
         return bankService.showAccounts();
-    }
-
-    @PostMapping(value = "/account/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("isAuthenticated()")
-    public TransactionResponseDTO transfer(@RequestBody @Valid TransactionDTO transactionDTO)
-            throws AccountNotFoundException {
-        Transaction transaction = bankService.transfer(transactionDTO);
-        return new TransactionResponseDTO(
-                transaction.getId(),
-                transaction.getSenderAccount().getAccountNumber(),
-                transaction.getReceiverAccount().getAccountNumber(),
-                transaction.getAmount(),
-                transaction.getTimestamp());
     }
 
     // @GetMapping("/account/transfer/transaction_detail")

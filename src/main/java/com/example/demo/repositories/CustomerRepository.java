@@ -14,7 +14,9 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     // Automatically: SELECT COUNT(*) > 0 FROM customer WHERE customerNumber = ?
     boolean existsByCustomerNumber(String customerNumber);
 
+    // SELECT COUNT(*) > 0 FROM customer WHERE email = ?
     boolean existsByEmail(String email);
 
+    // SELECT COUNT(*) > 0 FROM customer WHERE phoneNumber = ?
     boolean existsByPhoneNumber(String phoneNumber);
 }
