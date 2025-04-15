@@ -20,9 +20,12 @@ import com.example.demo.model.Transaction;
 import com.example.demo.model.dto.TransactionDTO;
 import com.example.demo.model.dto.TransactionResponseDTO;
 import com.example.demo.services.TransactionService;
+import com.example.demo.utils.Constants;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Validated
 @RestController
@@ -45,10 +48,10 @@ public class TransactionController {
                 transaction.getTimestamp());
     }
 
-    // TODO: Validation with DTOs.
     @GetMapping("/transaction_detail")
     @PreAuthorize("isAuthenticated()")
-    public TransactionResponseDTO getTransactionDetail(@RequestParam(required = true) Long transactionId)
+    public TransactionResponseDTO getTransactionDetail(
+            @RequestParam(required = true) @NotBlank @Pattern(regexp = "^[0-9]{12}$", message = "Transaction ID must be exactly 12 digits") String transactionId)
             throws AccountNotFoundException, AccessDeniedException {
         Transaction transaction = transactionService.getTransactionDetail(transactionId);
 
@@ -60,11 +63,10 @@ public class TransactionController {
                 transaction.getTimestamp());
     }
 
-    // TODO: Validation with DTOs.
     @GetMapping("/transaction_history")
     @PreAuthorize("isAuthenticated()")
     public List<TransactionResponseDTO> getTransactionHistory(
-            @RequestParam(required = true) @NotBlank String bankAccountNumber)
+            @RequestParam(required = true) @NotBlank @Pattern(regexp = "^[0-9]{10}$", message = "Bank Account Number must be exactly 10 digits") String bankAccountNumber)
             throws AccountNotFoundException, AccessDeniedException {
         return transactionService.getTransactionsByBankAccount(bankAccountNumber);
     }

@@ -50,14 +50,11 @@ public class TransactionService {
     // @ Throws AccessDeniedException if the user does not have access to the
     // transaction.
     @PreAuthorize("isAuthenticated()")
-    public Transaction getTransactionDetail(Long transactionId)
+    public Transaction getTransactionDetail(String transactionId)
             throws AccountNotFoundException, IllegalArgumentException, AccessDeniedException, NoSuchElementException {
         // Validate transaction ID
         if (transactionId == null) {
             throw new IllegalArgumentException("Transaction ID cannot be null.");
-        }
-        if (transactionId <= 0) {
-            throw new IllegalArgumentException("Transaction ID must be a positive number.");
         }
         Customer customer = securityUtil.getCurrentCustomer();
         Transaction transaction = transactionRepo.findById(transactionId)

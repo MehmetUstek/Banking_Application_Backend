@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.model.Transaction;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, String> {
 
     List<Transaction> findBySenderAccount_AccountNumberOrReceiverAccount_AccountNumberOrderByTimestampDesc(
             String senderAccountNumber,
