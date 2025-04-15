@@ -22,6 +22,7 @@ import com.example.demo.model.dto.TransactionResponseDTO;
 import com.example.demo.repositories.BankAccountRepository;
 import com.example.demo.repositories.TransactionRepository;
 import com.example.demo.utils.AccountUtil;
+import com.example.demo.utils.RandomNumberGenerator;
 import com.example.demo.utils.SecurityUtil;
 
 import jakarta.transaction.Transactional;
@@ -117,7 +118,8 @@ public class TransactionService {
         // List<Transaction> transactions =
         // transactionRepo.findByAccountNumber(account.getAccountNumber());
         List<Transaction> transactions = transactionRepo
-                .findBySenderAccount_AccountNumberOrReceiverAccount_AccountNumber(account.getAccountNumber(),
+                .findBySenderAccount_AccountNumberOrReceiverAccount_AccountNumberOrderByTimestampDesc(
+                        account.getAccountNumber(),
                         account.getAccountNumber());
 
         // Convert transactions to TransactionResponseDTO
@@ -164,6 +166,7 @@ public class TransactionService {
 
         // Create and save the transaction
         Transaction transaction = new Transaction();
+        transaction.setId(RandomNumberGenerator.generateRandomTransactionNumber());
         transaction.setSenderAccount(senderAccount);
         transaction.setReceiverAccount(receiverAccount);
         transaction.setAmount(transactionDTO.getAmount());

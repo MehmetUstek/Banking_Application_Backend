@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +80,18 @@ public class AuthController {
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(401).body("{\"error\":\"Invalid customerNumber or password\"}");
         }
+    }
+
+    @GetMapping(value = "/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        // Invalidate the JWT cookie
+        Cookie jwtCookie = new Cookie("JWT_TOKEN", null);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(0);
+        jwtCookie.setAttribute("SameSite", "Strict");
+        response.addCookie(jwtCookie);
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     // Automatically creates a bank account on signup.

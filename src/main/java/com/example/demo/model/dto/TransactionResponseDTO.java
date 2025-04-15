@@ -5,13 +5,14 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class TransactionResponseDTO {
-    private Long id;
+    private String id;
     private Optional<String> senderAccountNumber;
     private Optional<String> receiverAccountNumber;
     private BigDecimal amount;
     private Instant timestamp;
 
-    public TransactionResponseDTO(Long id, String senderAccountNumber, String receiverAccountNumber, BigDecimal amount,
+    public TransactionResponseDTO(String id, String senderAccountNumber, String receiverAccountNumber,
+            BigDecimal amount,
             Instant timestamp) {
         this.id = id;
         this.senderAccountNumber = Optional.ofNullable(senderAccountNumber);
@@ -21,11 +22,11 @@ public class TransactionResponseDTO {
     }
 
     // Getters and setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

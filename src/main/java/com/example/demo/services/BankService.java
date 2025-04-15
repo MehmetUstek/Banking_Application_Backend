@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
 import java.math.BigDecimal;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -12,16 +11,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exceptions.InsufficientFundsException;
-import com.example.demo.exceptions.SameAccountTransferException;
 import com.example.demo.model.BankAccount;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Transaction;
 import com.example.demo.model.dto.BankAccountDTO;
-import com.example.demo.model.dto.TransactionDTO;
 import com.example.demo.repositories.BankAccountRepository;
 import com.example.demo.repositories.CustomerRepository;
 import com.example.demo.repositories.TransactionRepository;
 import com.example.demo.utils.AccountUtil;
+import com.example.demo.utils.RandomNumberGenerator;
 import com.example.demo.utils.SecurityUtil;
 import com.example.demo.validators.AccountNumberValidator;
 
@@ -75,6 +73,7 @@ public class BankService {
         // Recording the transaction.
         // No sender for deposits
         Transaction transaction = new Transaction();
+        transaction.setId(RandomNumberGenerator.generateRandomTransactionNumber());
         transaction.setSenderAccount(null);
         transaction.setReceiverAccount(account);
         transaction.setAmount(amount);
@@ -105,6 +104,7 @@ public class BankService {
         // Negative amount for withdrawals
 
         Transaction transaction = new Transaction();
+        transaction.setId(RandomNumberGenerator.generateRandomTransactionNumber());
         transaction.setSenderAccount(account);
         transaction.setReceiverAccount(null);
         transaction.setAmount(amount.negate());

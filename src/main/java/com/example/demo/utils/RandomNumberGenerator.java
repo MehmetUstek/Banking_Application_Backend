@@ -14,12 +14,23 @@ public class RandomNumberGenerator {
         return accountNumber.toString();
     }
 
-    /// Generates a random 12-digit account number
-    /// @return a random 12-digit account number
+    /// Generates a random CUSTOMER_NUMBER_LENGTH-digit account number
+    /// @return a random CUSTOMER_NUMBER_LENGTH-digit account number
     public static String generateCustomerNumber() {
         Random random = new Random();
         StringBuilder customerNumber = new StringBuilder();
         for (int i = 0; i < Constants.CUSTOMER_NUMBER_LENGTH; i++) {
+            customerNumber.append(random.nextInt(10));
+        }
+        return customerNumber.toString();
+    }
+
+    /// Generates a random TRANSACTION_NUMBER_LENGTH-digit transaction number
+    /// @return a random TRANSACTION_NUMBER_LENGTH-digit transaction number
+    public static String generateRandomTransactionNumber() {
+        Random random = new Random();
+        StringBuilder customerNumber = new StringBuilder();
+        for (int i = 0; i < Constants.TRANSACTION_NUMBER_LENGTH; i++) {
             customerNumber.append(random.nextInt(10));
         }
         return customerNumber.toString();

@@ -29,7 +29,7 @@ CREATE TABLE bank_account (
 );
 
 CREATE TABLE transaction (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(12) PRIMARY KEY,
     sender_account_number VARCHAR(255),
     receiver_account_number VARCHAR(255),
     amount DECIMAL(19, 2) NOT NULL,
