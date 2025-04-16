@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.demo.model.Loan;
 import com.example.demo.model.dto.LoanResponseDTO;
 
-public interface LoanRepository extends JpaRepository<Loan, Long> {
+public interface LoanRepository extends JpaRepository<Loan, String> {
 
     @Query("SELECT new com.example.demo.model.dto.LoanResponseDTO(" +
             "l.loanId, l.loanAmount, l.remainingAmount, l.interestRate, " +

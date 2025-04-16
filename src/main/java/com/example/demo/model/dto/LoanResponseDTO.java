@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 public class LoanResponseDTO {
-    private Long loanId;
+    private String loanId;
     @NotNull
     @Positive
     private BigDecimal loanAmount;
@@ -28,7 +28,7 @@ public class LoanResponseDTO {
     @Pattern(regexp = "^[0-9]{10}$", message = "Bank account number must be exactly 10 digits")
     private String accountNumber;
 
-    public LoanResponseDTO(Long loanId, BigDecimal loanAmount, BigDecimal remainingAmount, BigDecimal interestRate,
+    public LoanResponseDTO(String loanId, BigDecimal loanAmount, BigDecimal remainingAmount, BigDecimal interestRate,
             Instant startDate, Instant endDate, String status, String accountNumber) {
         this.loanId = loanId;
         this.loanAmount = loanAmount;
@@ -44,11 +44,11 @@ public class LoanResponseDTO {
     }
 
     // Getters and setters
-    public Long getLoanId() {
+    public String getLoanId() {
         return loanId;
     }
 
-    public void setLoanId(Long loanId) {
+    public void setLoanId(String loanId) {
         this.loanId = loanId;
     }
 

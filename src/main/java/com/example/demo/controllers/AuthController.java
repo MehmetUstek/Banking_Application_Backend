@@ -91,6 +91,20 @@ public class AuthController {
         jwtCookie.setMaxAge(0);
         jwtCookie.setAttribute("SameSite", "Strict");
         response.addCookie(jwtCookie);
+
+        Cookie sessionCookie = new Cookie("JSESSIONID", null);
+        sessionCookie.setHttpOnly(true);
+        sessionCookie.setPath("/");
+        sessionCookie.setMaxAge(0);
+        sessionCookie.setAttribute("SameSite", "Strict");
+        response.addCookie(sessionCookie);
+
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", null);
+        csrfCookie.setHttpOnly(true);
+        csrfCookie.setPath("/");
+        csrfCookie.setMaxAge(0);
+        csrfCookie.setAttribute("SameSite", "Strict");
+        response.addCookie(csrfCookie);
         return ResponseEntity.ok("Logged out successfully");
     }
 

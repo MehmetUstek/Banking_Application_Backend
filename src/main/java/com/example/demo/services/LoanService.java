@@ -22,6 +22,7 @@ import com.example.demo.model.dto.LoanResponseDTO;
 import com.example.demo.repositories.BankAccountRepository;
 import com.example.demo.repositories.LoanRepository;
 import com.example.demo.utils.AccountUtil;
+import com.example.demo.utils.RandomNumberGenerator;
 import com.example.demo.utils.SecurityUtil;
 
 import jakarta.transaction.Transactional;
@@ -66,6 +67,7 @@ public class LoanService {
 
         // Create and populate the Loan entity
         Loan loan = new Loan();
+        loan.setLoanId(RandomNumberGenerator.generateRandomLoanNumber());
         loan.setLoanAmount(loanRequestDTO.getLoanAmount());
         loan.setRemainingAmount(loanRequestDTO.getLoanAmount());
         loan.setStartDate(startDate);
@@ -85,7 +87,7 @@ public class LoanService {
     /// loan.
     @Transactional
     @PreAuthorize("isAuthenticated()")
-    public Loan repayLoan(Long loanId, @NotNull @Positive BigDecimal payment)
+    public Loan repayLoan(String loanId, @NotNull @Positive BigDecimal payment)
             throws AccountNotFoundException, LoanNotFoundException {
         // Fetch the loan
         Loan loan = loanRepo.findById(loanId)
@@ -131,7 +133,7 @@ public class LoanService {
         return loanRepo.save(loan);
     }
 
-    public Loan getLoan(Long loanId) {
+    public Loan getLoan(String loanId) {
         Loan loan = loanRepo.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan not found: " + loanId));
         Customer currentCustomer = securityUtil.getCurrentCustomer();

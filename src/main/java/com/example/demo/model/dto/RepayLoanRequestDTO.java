@@ -6,16 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class RepayLoanRequestDTO {
-    private Long loanId;
+    private String loanId;
     @NotNull
     @Positive
     private BigDecimal paymentAmount;
 
-    public Long getLoanId() {
+    public String getLoanId() {
         return loanId;
     }
 
-    public void setLoanId(Long loanId) {
+    public void setLoanId(String loanId) {
         this.loanId = loanId;
     }
 

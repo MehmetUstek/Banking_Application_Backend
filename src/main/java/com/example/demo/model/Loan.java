@@ -3,9 +3,8 @@ package com.example.demo.model;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,8 +14,8 @@ import jakarta.persistence.Table;
 @Table(name = "loan")
 public class Loan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long loanId;
+    @Column(length = 12)
+    private String loanId;
 
     private BigDecimal loanAmount;
     private BigDecimal interestRate;
@@ -38,11 +37,11 @@ public class Loan {
 
     // Getters & setters
 
-    public Long getLoanId() {
+    public String getLoanId() {
         return loanId;
     }
 
-    public void setLoanId(Long loanId) {
+    public void setLoanId(String loanId) {
         this.loanId = loanId;
     }
 

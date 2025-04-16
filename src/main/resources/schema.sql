@@ -41,7 +41,7 @@ CREATE TABLE transaction (
 );
 
 CREATE TABLE loan (
-    loan_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    loan_id VARCHAR(12) PRIMARY KEY,
     customer_number VARCHAR(20) NOT NULL,
     account_number VARCHAR(10), -- Indicates the account number where the loan is deposited.
     loan_amount DECIMAL(10, 2) NOT NULL,

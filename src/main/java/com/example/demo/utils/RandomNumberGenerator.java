@@ -35,4 +35,15 @@ public class RandomNumberGenerator {
         }
         return customerNumber.toString();
     }
+
+    /// Generates a random LOAN_NUMBER_LENGTH-digit loan number
+    /// @return a random LOAN_NUMBER_LENGTH-digit loan number
+    public static String generateRandomLoanNumber() {
+        Random random = new Random();
+        StringBuilder loanId = new StringBuilder();
+        for (int i = 0; i < Constants.LOAN_NUMBER_LENGTH; i++) {
+            loanId.append(random.nextInt(10));
+        }
+        return loanId.toString();
+    }
 }

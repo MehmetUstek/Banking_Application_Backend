@@ -129,6 +129,7 @@ public class SecurityConfig {
             config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Frontend URL for DEV environment.
             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
             config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-XSRF-TOKEN"));
+            config.setExposedHeaders(Arrays.asList("X-CSRF-TOKEN"));
             config.setAllowCredentials(true);
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", config);
