@@ -13,3 +13,7 @@
 
 localhost:8080/swagger-ui.html
 /demo/v3/api-docs
+
+# Postman Collections
+
+Navigate to /postman_collections

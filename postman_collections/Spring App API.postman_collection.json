@@ -1,0 +1,647 @@
+{
+	"info": {
+		"_postman_id": "3e7f30eb-0d86-47bd-ab00-18ca37de5750",
+		"name": "Spring App API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19992363"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const csrfToken = pm.response.headers.get('X-CSRF-TOKEN');",
+									"if (csrfToken) {",
+									"    pm.environment.set('csrf', csrfToken);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerNumber\": \"{{customerNumber}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    let jsonData = pm.response.json();",
+									"    pm.environment.set(\"customerNumber\", jsonData.customerNumber);",
+									"    const signupData = {",
+									"        customerNumber: pm.environment.get(\"customerNumber\"),",
+									"        password: pm.environment.get(\"password\")",
+									"    };",
+									"",
+									"    pm.sendRequest({",
+									"        url: pm.environment.get(\"base_url\") + \"/api/auth/login\",",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(signupData)",
+									"        }",
+									"    }, function (err, res) {",
+									"        if (err) {",
+									"            console.log(\"Login request failed after signup:\", err);",
+									"        } else {",
+									"            if (res.code === 200) {",
+									"                console.log(\"Logged in!\");",
+									"            } else {",
+									"                console.log(\"Login failed, status code:\", res.code);",
+									"            }",
+									"        }",
+									"    });",
+									"} "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.cookies.clear();",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// Automatically creates a bank account.\n{\n    \"password\": \"{{password}}\",\n    \"name\": \"mehmet\",\n    \"email\": \"mehme1t@example.com\",\n    \"phoneNumber\": \"+9055511112131\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/signup",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banking",
+			"item": [
+				{
+					"name": "Loan",
+					"item": [
+						{
+							"name": "Create Loan",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"loanAmount\": 1000,\n  \"duration\": 3,\n  \"bankAccountNumber\": \"{{currentAccountNumber}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/bank/loan",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"loan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Repay Loan",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"loanId\": 1,\n  \"paymentAmount\": 300\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/bank/loan/repay",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"loan",
+										"repay"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Loans",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/bank/loan/loans",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"loan",
+										"loans"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Get Customer Number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// In the Tests tab of your token request",
+											"if (pm.response.code === 200) {",
+											"    let jsonData = pm.response.json();",
+											"    pm.environment.set(\"customerNumber\", jsonData.customerNumber);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/bank/customer/get_customer_number",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"customer",
+										"get_customer_number"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaction",
+					"item": [
+						{
+							"name": "Transaction Detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/bank/transaction/transaction_detail?transactionId=2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"transaction",
+										"transaction_detail"
+									],
+									"query": [
+										{
+											"key": "transactionId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Transaction History",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/bank/transaction/transaction_history?bankAccountNumber={{currentAccountNumber}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"transaction",
+										"transaction_history"
+									],
+									"query": [
+										{
+											"key": "bankAccountNumber",
+											"value": "{{currentAccountNumber}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Transfer Money",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-XSRF-TOKEN",
+										"value": "{{csrf}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"senderAccountNumber\": \"{{currentAccountNumber}}\",\n    \"receiverAccountNumber\": \"{{receiverAccountNumber}}\",\n    \"amount\": 100.0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/bank/transaction/transfer",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"bank",
+										"transaction",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "View Total Balance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/bank/account/view_total_balance",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"account",
+								"view_total_balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/bank/account/view_balance?accountNumber={{currentAccountNumber}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"account",
+								"view_balance"
+							],
+							"query": [
+								{
+									"key": "accountNumber",
+									"value": "{{currentAccountNumber}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// In the Tests tab of your token request",
+									"if (pm.response.code === 200) {",
+									"    let jsonData = pm.response.json();",
+									"    pm.environment.set(\"currentAccountNumber\", jsonData[0].accountNumber);",
+									"    if (jsonData[1] != null){",
+									"        pm.environment.set(\"receiverAccountNumber\", jsonData[1].accountNumber);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{csrf}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bank/show_accounts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"show_accounts"
+							]
+						},
+						"description": "The `GET` request retrieves a list of bank accounts with their respective account numbers and balances.\n\n### Response\n\nThe response is a JSON array containing objects with the following properties:\n\n- `accountNumber` (string): The account number associated with the bank account.\n    \n- `balance` (number): The current balance in the bank account.\n    \n\nExample:\n\n``` json\n[\n    {\n        \"accountNumber\": \"XXXXXX\",\n        \"balance\": 1000\n    },\n    {\n        \"accountNumber\": \"XXXXXX\",\n        \"balance\": 2500\n    }\n]\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{csrf}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": \"{{currentAccountNumber}}\",\n    \"amount\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bank/account/deposit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"account",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{csrf}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": \"{{currentAccountNumber}}\",\n    \"amount\": 100\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bank/account/withdraw",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"account",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{csrf}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bank/account/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"bank",
+								"account",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
