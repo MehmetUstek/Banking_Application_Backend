@@ -21,8 +21,6 @@ public class DataSourceConfig {
 
     @Bean
     public DataSource dataSource() {
-        System.console().printf("hay %s ", System.getProperty("DB_USERNAME"));
-        System.console().printf("hay %s ", System.getProperty("JWT_SECRET"));
         return DataSourceBuilder.create()
                 .url(url)
                 .username(System.getProperty("DB_USERNAME"))
